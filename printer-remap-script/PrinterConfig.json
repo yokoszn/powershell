@@ -1,0 +1,25 @@
+{
+  "UniversalPrintPath": "\\\\print-server\\printers",
+  "Printers": [
+    {
+      "Name": "Office Printer 1",
+      "IP": "192.168.1.10",
+      "ShareName": "Printer-Office-1"
+    },
+    {
+      "Name": "Office Printer 2",
+      "IP": "192.168.1.11",
+      "ShareName": "Printer-Office-2"
+    },
+    {
+      "Name": "Accounting Printer",
+      "IP": "192.168.1.20",
+      "ShareName": "Printer-Accounting"
+    },
+    {
+      "Name": "Warehouse Printer",
+      "IP": "192.168.1.30",
+      "ShareName": "Printer-Warehouse"
+    }
+  ]
+}
