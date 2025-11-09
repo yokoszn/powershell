@@ -1,0 +1,21 @@
+{
+  "PrinterShares": [
+    {
+      "DisplayName": "Office Printer 1",
+      "Id": "your-printer-share-id-1"
+    },
+    {
+      "DisplayName": "Office Printer 2",
+      "Id": "your-printer-share-id-2"
+    },
+    {
+      "DisplayName": "Accounting Printer",
+      "Id": "your-printer-share-id-3"
+    }
+  ],
+  "PrinterIPs": [
+    "192.168.1.10",
+    "192.168.1.11",
+    "192.168.1.20"
+  ]
+}
