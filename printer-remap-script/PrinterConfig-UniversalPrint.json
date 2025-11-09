@@ -1,0 +1,68 @@
+{
+  "UniversalPrint": {
+    "Enabled": true,
+    "TenantId": "your-tenant-id.onmicrosoft.com",
+    "AuthenticationMethod": "Interactive",
+    "ServiceAccount": {
+      "UserPrincipalName": "printer-admin@company.com",
+      "UseStoredCredentials": false,
+      "CredentialPath": ""
+    }
+  },
+  "Printers": [
+    {
+      "Name": "Office Printer 1",
+      "UniversalPrintShareName": "Office-Printer-1-Share",
+      "UniversalPrintShareId": "",
+      "Description": "Main office printer on 2nd floor",
+      "Enabled": true
+    },
+    {
+      "Name": "Office Printer 2",
+      "UniversalPrintShareName": "Office-Printer-2-Share",
+      "UniversalPrintShareId": "",
+      "Description": "Reception area printer",
+      "Enabled": true
+    },
+    {
+      "Name": "Accounting Printer",
+      "UniversalPrintShareName": "Accounting-Printer-Share",
+      "UniversalPrintShareId": "",
+      "Description": "Accounting department secure printer",
+      "Enabled": true
+    },
+    {
+      "Name": "Warehouse Printer",
+      "UniversalPrintShareName": "Warehouse-Printer-Share",
+      "UniversalPrintShareId": "",
+      "Description": "Warehouse label printer",
+      "Enabled": true
+    }
+  ],
+  "Settings": {
+    "RemoveExistingPrinters": true,
+    "SkipUnavailablePrinters": true,
+    "SetDefaultPrinter": "",
+    "InstallDelayMs": 200,
+    "RetryFailedPrinters": true,
+    "MaxRetries": 2
+  },
+  "Reporting": {
+    "EnableCSVExport": true,
+    "CSVPath": "\\\\file-server\\IT\\PrinterReports",
+    "EnableEmailReport": true,
+    "EmailSettings": {
+      "SMTPServer": "smtp.office365.com",
+      "SMTPPort": 587,
+      "FromAddress": "printer-remap@company.com",
+      "ToAddress": "helpdesk@company.com",
+      "UseSSL": true,
+      "RequiresAuth": false,
+      "OnlyEmailOnFailure": true
+    },
+    "EnableWebhook": false,
+    "WebhookURL": "http://your-server:8080/printerreport",
+    "EnableUsageTracking": true,
+    "UsageTrackingPath": "\\\\file-server\\IT\\PrinterUsage"
+  }
+}
