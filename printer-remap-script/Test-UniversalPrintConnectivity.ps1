@@ -288,6 +288,7 @@ function Test-PrinterIPConnectivity {
         Add-ReportLine "Testing connectivity to physical printer IPs..."
         Add-ReportLine ""
 
+        $failed = $false
         foreach ($ip in $config.PrinterIPs) {
             try {
                 $ping = Test-Connection -ComputerName $ip -Count 2 -Quiet -ErrorAction Stop
@@ -303,13 +304,18 @@ function Test-PrinterIPConnectivity {
                 }
                 else {
                     Add-ReportLine "[ERROR] $ip is NOT reachable"
+                    $failed = $true
                 }
             }
             catch {
                 Add-ReportLine "[ERROR] $ip - $($_.Exception.Message)"
+                $failed = $true
             }
         }
 
+        if ($failed) {
+            return $false
+        }
         return $true
     }
     catch {
@@ -355,6 +361,7 @@ function Test-InternetConnectivity {
         "https://login.microsoftonline.com"
     )
 
+    $allSucceeded = $true
     foreach ($url in $testUrls) {
         try {
             $response = Invoke-WebRequest -Uri $url -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
@@ -363,10 +370,11 @@ function Test-InternetConnectivity {
         catch {
             Add-ReportLine "[ERROR] $url is NOT reachable"
             Add-ReportLine "        Error: $($_.Exception.Message)"
+            $allSucceeded = $false
         }
     }
 
-    return $true
+    return $allSucceeded
 }
 
 # Test 10: Validate Config File

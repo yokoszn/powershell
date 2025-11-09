@@ -152,10 +152,42 @@ function Install-UniversalPrintPrinter {
         $StatusBox.Items.Add("  Installing via UPPrinterInstaller...")
         Write-Log "Installing $DisplayName using UPPrinterInstaller.exe with share ID: $PrinterShareId"
 
-        # Run the installer
-        # Syntax: UPPrinterInstaller.exe /install /printershareId:<id>
-        $arguments = "/install /printerSharedId:$PrinterShareId"
+        # Get OMA-DM Account ID from scheduled tasks
+        $omaDmAccountId = $null
+        try {
+            $entMgmtTasks = Get-ScheduledTask -TaskPath "\Microsoft\Windows\EnterpriseMgmt\*" -ErrorAction SilentlyContinue
+            if ($entMgmtTasks) {
+                # Extract GUID from task path (e.g., \Microsoft\Windows\EnterpriseMgmt\{GUID}\)
+                $firstTask = $entMgmtTasks | Select-Object -First 1
+                if ($firstTask.TaskPath -match '\\EnterpriseMgmt\\(.+?)\\') {
+                    $omaDmAccountId = $matches[1]
+                    Write-Log "Found OMA-DM Account ID: $omaDmAccountId"
+                }
+            }
+        }
+        catch {
+            Write-Log "Could not retrieve OMA-DM Account ID from scheduled tasks: $($_.Exception.Message)"
+        }
 
+        # Generate correlation ID
+        $correlationId = [guid]::NewGuid().ToString()
+        Write-Log "Generated correlation ID: $correlationId"
+
+        # Build arguments
+        # Note: Parameter casing matters - use lowercase for printershareId
+        $arguments = "/install /printershareId:$PrinterShareId"
+
+        # Add OMA-DM account ID if available (required for Intune-managed devices)
+        if ($omaDmAccountId) {
+            $arguments += " /omadmaccountid:$omaDmAccountId"
+        }
+
+        # Add correlation ID
+        $arguments += " /correlationid:$correlationId"
+
+        Write-Log "Installer arguments: $arguments"
+
+        # Run the installer
         $process = Start-Process -FilePath $installerPath -ArgumentList $arguments -Wait -PassThru -NoNewWindow
 
         if ($process.ExitCode -eq 0) {
@@ -166,6 +198,7 @@ function Install-UniversalPrintPrinter {
         else {
             $StatusBox.Items.Add("  Failed with exit code: $($process.ExitCode)")
             Write-Log "UPPrinterInstaller failed with exit code: $($process.ExitCode)"
+            Write-Log "  Arguments used: $arguments"
             return $false
         }
     }
